@@ -9,25 +9,24 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="16sp">
 
         <ImageView
             android:id="@+id/image_Poster1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:gravity="center"
-            android:scaleType="centerCrop"
+            android:layout_weight="1"
             android:src="@drawable/image1" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:paddingTop="24dp"
+            android:paddingTop="24sp"
             android:text="1. 군 도"
             android:textColor="#ffffff"
-            android:textSize="24dp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <ImageView
@@ -52,12 +51,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/detailvewbuttonback"
-            android:paddingStart="32dp"
+            android:paddingStart="24sp"
             android:paddingTop="8dp"
-            android:paddingEnd="32dp"
+            android:paddingEnd="24sp"
             android:paddingBottom="8dp"
             android:text="상세보기"
             android:textColor="#ffffff"
-            android:textSize="32sp" />
+            android:textSize="24sp" />
     </LinearLayout>
 </FrameLayout>

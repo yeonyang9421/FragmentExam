@@ -1,5 +1,7 @@
 package kr.co.woobi.imyeon.fragmentexam;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,9 +17,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.MissingFormatArgumentException;
+
 import static android.app.Activity.RESULT_OK;
 
-public class Fragment11 extends Fragment implements View.OnClickListener {
+public class Fragment11 extends Fragment implements View.OnClickListener, MainActivity.OnBackKeyPressedListener {
     public static final int REQUEST_CODE_MAIN = 2000;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
@@ -119,4 +123,18 @@ public class Fragment11 extends Fragment implements View.OnClickListener {
             mAdapter.notifyDataSetChanged();
         }
     }
+
+    @Override
+    public void onBackKey() {
+        MainActivity activity = (MainActivity) getActivity();
+        activity.setOnKeyBackPressedListener(null);
+        activity.onBackPressed();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((MainActivity) context).setOnKeyBackPressedListener(this);
+    }
+
 }

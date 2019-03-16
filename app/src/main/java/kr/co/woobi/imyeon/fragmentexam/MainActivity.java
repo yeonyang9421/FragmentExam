@@ -13,6 +13,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,16 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -91,6 +84,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             setResult(RESULT_OK);
             finish();
+        }
+    }
+
+    public interface OnBackKeyPressedListener {
+        public void onBackKey();
+    }
+
+    private OnBackKeyPressedListener mOnBackKeyPressedListener;
+
+    public void setOnKeyBackPressedListener(OnBackKeyPressedListener listener) {
+        mOnBackKeyPressedListener = listener;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)  ||(mOnBackKeyPressedListener !=null)){
+            drawer.closeDrawer(GravityCompat.START);
+
+            mOnBackKeyPressedListener.onBackKey();
+        }else if(getSupportFragmentManager().getBackStackEntryCount()==0){
+            super.onBackPressed();
+        } else {
+            super.onBackPressed();
         }
     }
 }

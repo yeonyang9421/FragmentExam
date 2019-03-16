@@ -19,17 +19,17 @@ public class Fragment3 extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment3, container, false);
-        Button btn1= view.findViewById(R.id.button1);
+        Button btn1 = view.findViewById(R.id.button1);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentTransaction transaction= getActivity().getSupportFragmentManager().beginTransaction();
-                Fragment11 fragment11=new Fragment11();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                Fragment11 fragment11 = new Fragment11();
                 transaction.replace(R.id.frame_container, fragment11);
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
-
         return view;
     }
 }

@@ -26,6 +26,7 @@ public class Fragment4 extends Fragment {
                 FragmentTransaction transaction= getActivity().getSupportFragmentManager().beginTransaction();
                 Fragment11 fragment11=new Fragment11();
                 transaction.replace(R.id.frame_container, fragment11);
+                transaction.addToBackStack(null);
                 transaction.commit();
             }
         });
