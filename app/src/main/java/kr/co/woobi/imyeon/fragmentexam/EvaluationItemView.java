@@ -33,9 +33,6 @@ public class EvaluationItemView extends LinearLayout {
         text_userId = findViewById(R.id.text_useId);
         text_time = findViewById(R.id.text_time);
         text_comment = findViewById(R.id.text_comment);
-
-
-
     }
 
     public void setImageView(int resId) {

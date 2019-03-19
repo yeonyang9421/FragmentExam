@@ -29,7 +29,6 @@ public class DisplayAllActivity extends AppCompatActivity {
         Intent intent = getIntent();
         mNewComment = intent.getStringExtra("comment");
         mNewNumStars = intent.getDoubleExtra("numStars",0);
-
     }
 
     @Override

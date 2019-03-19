@@ -26,9 +26,7 @@ public class OneLineRatingActivity extends AppCompatActivity implements View.OnC
         mButtonCancel = findViewById(R.id.button_cancel);
         mButtonSave.setOnClickListener(this);
         mButtonCancel.setOnClickListener(this);
-
         mRatingBar.setOnRatingBarChangeListener(this);
-
     }
 
     @Override

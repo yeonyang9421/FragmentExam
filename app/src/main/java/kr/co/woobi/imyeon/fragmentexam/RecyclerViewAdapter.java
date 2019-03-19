@@ -25,7 +25,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_rating, viewGroup, false);
-
         return new ViewHolder(view);
     }
 
@@ -60,7 +59,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             mTextTime = itemView.findViewById(R.id.text_time);
             mRatingBar = itemView.findViewById(R.id.ratingBar);
             mTextComment = itemView.findViewById(R.id.text_comment);
-
         }
     }
 }
