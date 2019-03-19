@@ -112,7 +112,6 @@ public class Fragment11 extends Fragment implements View.OnClickListener, MainAc
                 startActivityForResult(intent1, REQUEST_CODE_MAIN);
                 Toast.makeText(getActivity(), "모두보기 버튼을 눌러졌습니다.", Toast.LENGTH_SHORT).show();
                 break;
-
         }
     }
 
