@@ -21,10 +21,10 @@
                 android:orientation="horizontal">
 
                 <ImageView
+                    android:id="@+id/image_small_poster"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:src="@drawable/image11" />
+                    android:layout_margin="10dp"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -38,20 +38,28 @@
                         android:layout_height="wrap_content">
 
                         <TextView
+                            android:id="@+id/text_title"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:padding="4dp"
-                            android:text="군도"
+
                             android:textColor="#ffffff"
                             android:textSize="24dp"
                             android:textStyle="bold" />
 
                         <ImageView
+                            android:id="@+id/image_movie_rated"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:scaleType="fitXY"
-                            android:src="@drawable/ic_15" />
+
+
+
+
+
+
+                             />
                     </LinearLayout>
 
                     <TextView

@@ -10,7 +10,6 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 public class OneLineRatingActivity extends AppCompatActivity implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
-    public static final int REQUEST_CODE = 1000;
     private RatingBar mRatingBar;
     private EditText mEditTextComment;
     private Button mButtonSave;
@@ -48,7 +47,6 @@ public class OneLineRatingActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-        final int numStarts2 = mRatingBar.getNumStars();
         Toast.makeText(this, mRatingBar.getRating() + "", Toast.LENGTH_SHORT).show();
     }
 }

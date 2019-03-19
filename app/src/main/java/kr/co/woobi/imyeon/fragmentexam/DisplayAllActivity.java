@@ -11,8 +11,8 @@ import android.view.View;
 
 public class DisplayAllActivity extends AppCompatActivity {
     public static final int REQUEST_CODE = 1000;
-    String mNewComment;
-    double mNewNumStars;
+    private String mNewComment;
+    private double mNewNumStars;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
 
@@ -28,7 +28,7 @@ public class DisplayAllActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         mNewComment = intent.getStringExtra("comment");
-        mNewNumStars = intent.getDoubleExtra("numStars",0);
+        mNewNumStars = intent.getDoubleExtra("numStars", 0);
     }
 
     @Override

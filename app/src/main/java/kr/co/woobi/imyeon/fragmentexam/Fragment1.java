@@ -11,11 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
 
 public class Fragment1 extends Fragment {
     private int mImage;
     private String mTitle;
     private String mContent;
+    private Button mButton;
 
     public Fragment1() {
     }
@@ -45,7 +49,7 @@ public class Fragment1 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1, container, false);
 
-        Button btn1 = view.findViewById(R.id.button1);
+        mButton = view.findViewById(R.id.button1);
         ImageView imageView = view.findViewById(R.id.image_Poster1);
         imageView.setImageResource(mImage);
         TextView textTitle = view.findViewById(R.id.text_title);
@@ -53,12 +57,16 @@ public class Fragment1 extends Fragment {
         TextView textContent = view.findViewById(R.id.text_content);
         textContent.setText(mContent);
 
-        btn1.setOnClickListener(new View.OnClickListener() {
+        mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(getContext(), ""+v.getId(), Toast.LENGTH_SHORT).show();
+               /* if(v.equals(R.drawable.image1))
+                EventBus.getDefault().post(new EventItem(v.getId()));*/
+//               MyPagerAdapter myPagerAdapter=new MyPagerAdapter(getFragmentManager());
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                Fragment11 fragment11 = new Fragment11();
-                transaction.replace(R.id.frame_container, fragment11);
+                MovieIntroFragment movieIntroFragment = new MovieIntroFragment();
+                transaction.replace(R.id.frame_container, movieIntroFragment);
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

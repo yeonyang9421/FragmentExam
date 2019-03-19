@@ -1,6 +1,5 @@
 package kr.co.woobi.imyeon.fragmentexam;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,19 +8,22 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.MissingFormatArgumentException;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.w3c.dom.Text;
 
 import static android.app.Activity.RESULT_OK;
 
-public class Fragment11 extends Fragment implements View.OnClickListener, MainActivity.OnBackKeyPressedListener {
+public class MovieIntroFragment extends Fragment implements View.OnClickListener, MainActivity.OnBackKeyPressedListener {
     public static final int REQUEST_CODE_MAIN = 2000;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
@@ -40,8 +42,40 @@ public class Fragment11 extends Fragment implements View.OnClickListener, MainAc
     String mNewComment;
     double mNewNumStars;
 
-    public Fragment11() {
+    private ImageView mImageViewSmallPoster;
+    private TextView mTextViewTitle;
+    private  ImageView mImageViewRated;
+
+    int imageSmallPoster;
+    String movieTitle;
+    int imageMovieRated;
+
+    public MovieIntroFragment() {
     }
+
+
+    public static MovieIntroFragment newInstance(int imageSmallPoster, String movieTitle, int imageMovieRated) {
+        MovieIntroFragment movieIntroFragment = new MovieIntroFragment();
+        Bundle args = new Bundle();
+        args.putInt("imageSmallPoster", imageSmallPoster);
+        args.putString("movieTitle", movieTitle);
+        args.putInt("imageMovieRated", imageMovieRated);
+        movieIntroFragment.setArguments(args);
+        return movieIntroFragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            imageSmallPoster = getArguments().getInt("imageSmallPoster");
+            movieTitle = getArguments().getString("movieTitle");
+            imageMovieRated = getArguments().getInt("imageMovieRated");
+
+
+        }
+    }
+
 
     @Nullable
     @Override
@@ -53,6 +87,16 @@ public class Fragment11 extends Fragment implements View.OnClickListener, MainAc
         mRecyclerView.setAdapter(mAdapter);
 
         mAdapter.notifyDataSetChanged();
+
+//------------------------------------------------ 왜 안되냐규,,,,,
+        mImageViewSmallPoster = view.findViewById(R.id.image_small_poster);
+        mImageViewSmallPoster.setImageResource(imageSmallPoster);
+        mTextViewTitle=view.findViewById(R.id.text_title);
+        mTextViewTitle.setText(movieTitle);
+        mImageViewRated= view.findViewById(R.id.image_movie_rated);
+        mImageViewRated.setImageResource(imageMovieRated);
+
+
 
         mTextViewUp = view.findViewById(R.id.text_up);
         mTextViewDown = view.findViewById(R.id.text_down);
@@ -136,4 +180,25 @@ public class Fragment11 extends Fragment implements View.OnClickListener, MainAc
         ((MainActivity) context).setOnKeyBackPressedListener(this);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(EventItem event) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        MovieIntroFragment movieIntroFragment = new MovieIntroFragment();
+        transaction.replace(R.id.frame_container, movieIntroFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 }
