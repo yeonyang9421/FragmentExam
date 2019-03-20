@@ -35,7 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         viewHolder.mTextId.setText(item.getId());
         viewHolder.mTextTime.setText(item.getTime());
         viewHolder.mTextComment.setText(item.getComment());
-        viewHolder.mRatingBar.setRating((float)item.getNumStar());
+        viewHolder.mRatingBar.setRating((float) item.getNumStar());
 
         Log.d(TAG, "onBindViewHolder: " + item.getNumStar());
     }

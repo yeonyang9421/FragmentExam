@@ -22,8 +22,9 @@
 
                 <ImageView
                     android:id="@+id/image_small_poster"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="140dp"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
                     android:layout_margin="10dp"/>
 
                 <LinearLayout

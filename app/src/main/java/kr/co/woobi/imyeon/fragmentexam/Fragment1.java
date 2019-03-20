@@ -11,25 +11,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import org.greenrobot.eventbus.EventBus;
 
 public class Fragment1 extends Fragment {
     private int mImage;
     private String mTitle;
     private String mContent;
     private Button mButton;
+    private int position;
 
     public Fragment1() {
     }
 
-    public static Fragment1 newInstance(int image, String title, String content) {
+    public static Fragment1 newInstance(int image, String title, String content, int position) {
         Fragment1 fragment1 = new Fragment1();
         Bundle args = new Bundle();
         args.putInt("image", image);
         args.putString("title", title);
         args.putString("content", content);
+        args.putInt("position", position);
         fragment1.setArguments(args);
         return fragment1;
     }
@@ -41,6 +40,7 @@ public class Fragment1 extends Fragment {
             mImage = getArguments().getInt("image");
             mTitle = getArguments().getString("title");
             mContent = getArguments().getString("content");
+            position = getArguments().getInt("position");
         }
     }
 
@@ -60,13 +60,26 @@ public class Fragment1 extends Fragment {
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), ""+v.getId(), Toast.LENGTH_SHORT).show();
-               /* if(v.equals(R.drawable.image1))
-                EventBus.getDefault().post(new EventItem(v.getId()));*/
-//               MyPagerAdapter myPagerAdapter=new MyPagerAdapter(getFragmentManager());
                 FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-                MovieIntroFragment movieIntroFragment = new MovieIntroFragment();
-                transaction.replace(R.id.frame_container, movieIntroFragment);
+                int current = getArguments().getInt("position");
+                switch (current) {
+                    case 1:
+                        transaction.replace(R.id.frame_container, MovieIntroFragment.newInstance(R.drawable.image11, "군도", R.drawable.ic_15));
+                        break;
+                    case 2:
+                        transaction.replace(R.id.frame_container, MovieIntroFragment.newInstance(R.drawable.image22, "공조", R.drawable.ic_12));
+                        break;
+                    case 3:
+                        transaction.replace(R.id.frame_container, MovieIntroFragment.newInstance(R.drawable.image33, "더킹", R.drawable.ic_19));
+                        break;
+                    case 4:
+                        transaction.replace(R.id.frame_container, MovieIntroFragment.newInstance(R.drawable.image44, "레지던트이블", R.drawable.ic_15));
+                        break;
+                    case 5:
+                        transaction.replace(R.id.frame_container, MovieIntroFragment.newInstance(R.drawable.image55, "럭키", R.drawable.ic_12));
+                        break;
+                    default:
+                }
                 transaction.addToBackStack(null);
                 transaction.commit();
             }

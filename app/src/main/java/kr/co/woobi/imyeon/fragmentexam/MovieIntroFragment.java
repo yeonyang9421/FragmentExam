@@ -19,7 +19,6 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.w3c.dom.Text;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -44,7 +43,7 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
 
     private ImageView mImageViewSmallPoster;
     private TextView mTextViewTitle;
-    private  ImageView mImageViewRated;
+    private ImageView mImageViewRated;
 
     int imageSmallPoster;
     String movieTitle;
@@ -52,7 +51,6 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
 
     public MovieIntroFragment() {
     }
-
 
     public static MovieIntroFragment newInstance(int imageSmallPoster, String movieTitle, int imageMovieRated) {
         MovieIntroFragment movieIntroFragment = new MovieIntroFragment();
@@ -64,6 +62,7 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
         return movieIntroFragment;
     }
 
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +70,6 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
             imageSmallPoster = getArguments().getInt("imageSmallPoster");
             movieTitle = getArguments().getString("movieTitle");
             imageMovieRated = getArguments().getInt("imageMovieRated");
-
-
         }
     }
 
@@ -80,7 +77,7 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment11, container, false);
+        View view = inflater.inflate(R.layout.fragment_movie_introduction, container, false);
 
         mRecyclerView = view.findViewById(R.id.recycler_main);
         mAdapter = new RecyclerViewAdapter(DummyData.sDummyDatas);
@@ -91,12 +88,11 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
 //------------------------------------------------ 왜 안되냐규,,,,,
         mImageViewSmallPoster = view.findViewById(R.id.image_small_poster);
         mImageViewSmallPoster.setImageResource(imageSmallPoster);
-        mTextViewTitle=view.findViewById(R.id.text_title);
+        mTextViewTitle = view.findViewById(R.id.text_title);
         mTextViewTitle.setText(movieTitle);
-        mImageViewRated= view.findViewById(R.id.image_movie_rated);
+        mImageViewRated = view.findViewById(R.id.image_movie_rated);
         mImageViewRated.setImageResource(imageMovieRated);
-
-
+        mImageViewRated.setTag("movieRated");
 
         mTextViewUp = view.findViewById(R.id.text_up);
         mTextViewDown = view.findViewById(R.id.text_down);
@@ -108,7 +104,6 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
         mButton_ThumbDown.setOnClickListener(this);
         mButton_comment.setOnClickListener(this);
         mButton_displayAll.setOnClickListener(this);
-
         return view;
     }
 
@@ -146,11 +141,15 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.button_comment:
                 Intent intent = new Intent(getActivity(), OneLineRatingActivity.class);
+                intent.putExtra("title",mTextViewTitle.getText().toString());
+                intent.putExtra("rated",getArguments().getInt("imageMovieRated"));
                 startActivityForResult(intent, REQUEST_CODE_MAIN);
                 Toast.makeText(getActivity(), "작성하기 버튼을 눌러졌습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_displayAll:
                 Intent intent1 = new Intent(getActivity(), DisplayAllActivity.class);
+                intent1.putExtra("title",getArguments().getString("movieTitle"));
+                intent1.putExtra("rated",getArguments().getInt("imageMovieRated"));
                 intent1.putExtra("mComment", mNewComment);
                 intent1.putExtra("numStars", mNewNumStars);
                 startActivityForResult(intent1, REQUEST_CODE_MAIN);
@@ -178,27 +177,5 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
     public void onAttach(Context context) {
         super.onAttach(context);
         ((MainActivity) context).setOnKeyBackPressedListener(this);
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessageEvent(EventItem event) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        MovieIntroFragment movieIntroFragment = new MovieIntroFragment();
-        transaction.replace(R.id.frame_container, movieIntroFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 }

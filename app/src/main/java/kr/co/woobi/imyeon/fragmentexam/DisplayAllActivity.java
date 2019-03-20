@@ -5,30 +5,39 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 public class DisplayAllActivity extends AppCompatActivity {
     public static final int REQUEST_CODE = 1000;
+    private TextView mTextTitle;
+    private ImageView mImageRated;
     private String mNewComment;
     private double mNewNumStars;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
+    private Intent mIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_all);
 
+        mTextTitle=findViewById(R.id.text_displayall_title);
+        mImageRated=findViewById(R.id.image_displayall_rated);
+
         mRecyclerView = findViewById(R.id.recycler_displayall);
         mAdapter = new RecyclerViewAdapter(DummyData.sDummyDatas);
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
-        Intent intent = getIntent();
-        mNewComment = intent.getStringExtra("comment");
-        mNewNumStars = intent.getDoubleExtra("numStars", 0);
+        mIntent = getIntent();
+        mTextTitle.setText(mIntent.getStringExtra("title"));
+        mImageRated.setImageResource(mIntent.getIntExtra("rated",0));
+        mNewComment = mIntent.getStringExtra("comment");
+        mNewNumStars = mIntent.getDoubleExtra("numStars", 0);
     }
 
     @Override
@@ -44,6 +53,8 @@ public class DisplayAllActivity extends AppCompatActivity {
 
     public void writtingComment(View view) {
         Intent intent = new Intent(this, OneLineRatingActivity.class);
+        intent.putExtra("title",mTextTitle.getText().toString());
+       intent.putExtra("rated",mIntent.getIntExtra("rated",0));
         startActivityForResult(intent, REQUEST_CODE);
     }
 

@@ -14,7 +14,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import java.util.Stack;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -65,11 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (id == R.id.first) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivityForResult(intent, REQUEST_CODE);
-/*            Fragment1 fragment1 = new Fragment1();
-            FragmentTransaction transaction= this.getSupportFragmentManager().beginTransaction();
-            transaction.replace(R.id.frame_container, fragment1);
-            transaction.addToBackStack(null);
-            transaction.commit();*/
             finish();
         }
 
@@ -100,11 +94,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)  ||(mOnBackKeyPressedListener !=null)){
+        if (drawer.isDrawerOpen(GravityCompat.START) || (mOnBackKeyPressedListener != null)) {
             drawer.closeDrawer(GravityCompat.START);
 
             mOnBackKeyPressedListener.onBackKey();
-        }else if(getSupportFragmentManager().getBackStackEntryCount()==0){
+        } else if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
             super.onBackPressed();
         } else {
             super.onBackPressed();
