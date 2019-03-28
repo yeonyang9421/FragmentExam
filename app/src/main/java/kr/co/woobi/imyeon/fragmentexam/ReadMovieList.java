@@ -6,7 +6,7 @@ public class ReadMovieList {
     public String message;
     public int code;
     public String resultType;
-    public List<Result> result = null;
+    public List<MovieInfo> result = null;
 
     public String getMessage() {
         return message;
@@ -32,11 +32,11 @@ public class ReadMovieList {
         this.resultType = resultType;
     }
 
-    public List<Result> getResult() {
+    public List<MovieInfo> getResult() {
         return result;
     }
 
-    public void setResult(List<Result> result) {
+    public void setResult(List<MovieInfo> result) {
         this.result = result;
     }
 

@@ -1,20 +1,28 @@
 package kr.co.woobi.imyeon.fragmentexam;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
-import java.util.Stack;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -29,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setSupportActionBar(toolbar);
 
         ViewPager viewPager = findViewById(R.id.pager);
-        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+        final MoviePosterPagerAdapter adapter = new MoviePosterPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -40,6 +48,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://boostcourse-appapi.connect.or.kr:10000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Service service = retrofit.create(Service.class);
+        service.listMoiveList().enqueue(new Callback<ReadMovieList>() {
+            @Override
+            public void onResponse(Call<ReadMovieList> call, Response<ReadMovieList> response) {
+
+                if (response.body() != null) {
+                    List<MovieInfo> movieLists = response.body().result;
+
+                    List<Fragment> movieFragmentList = new ArrayList<>();
+                    for (MovieInfo movieInfo :  movieLists) {
+                        movieFragmentList.add(MoviePosterFragment.newInstance(movieInfo));
+                    }
+                    adapter.setItems(movieFragmentList);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ReadMovieList> call, Throwable t) {
+//                Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "onResponse: connect failed" + t.getLocalizedMessage());
+            }
+        });
     }
 
     @Override

@@ -1,18 +1,28 @@
 package kr.co.woobi.imyeon.fragmentexam;
 
-public class Result {
-    public int id;
-    public String title;
-    public String titleEng;
-    public String date;
-    public double userRating;
-    public double audienceRating;
-    public double reviewerRating;
-    public double reservationRate;
-    public int reservationGrade;
-    public int grade;
-    public String thumb;
-    public String image;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
+public class MovieInfo implements Serializable {
+    private int id;
+    private String title;
+    @SerializedName("title_eng")
+    private String titleEng;
+    private String date;
+    @SerializedName("user_rating")
+    private double userRating;
+    @SerializedName("audience_rating")
+    private double audienceRating;
+    @SerializedName("reviewer_rating")
+    private double reviewerRating;
+    @SerializedName("reservation_rate")
+    private double reservationRate;
+    @SerializedName("reservation_grade")
+    private int reservationGrade;
+    private int grade;
+    private String thumb;
+    private String image;
 
     public int getId() {
         return id;

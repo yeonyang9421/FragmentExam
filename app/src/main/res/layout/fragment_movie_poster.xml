@@ -13,17 +13,17 @@
 
         <ImageView
             android:id="@+id/image_Poster1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:padding="16dp"
             android:layout_weight="1"
+            android:scaleType="centerCrop"
             android:src="@drawable/image1" />
 
         <TextView
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:paddingTop="24sp"
             android:text="1. 군 도"
             android:textColor="#ffffff"
@@ -34,14 +34,12 @@
             android:id="@+id/image_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:src="@drawable/home_slider1" />
 
         <TextView
             android:id="@+id/text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:padding="8dp"
             android:text="예매율 61.6% | 15세 관람가 | D-1"
             android:textColor="#ffffff"
@@ -51,7 +49,6 @@
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:background="@drawable/detailvewbuttonback"
             android:paddingStart="24sp"
             android:paddingTop="8dp"
