@@ -13,11 +13,11 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
     public MyPagerAdapter(FragmentManager fm) {
         super(fm);
         mData = new ArrayList<>();
-        mData.add(Fragment1.newInstance(R.drawable.image1, "1. 군도", "예매율 61.6% | 15세 관람가 | D-1", 1));
-        mData.add(Fragment1.newInstance(R.drawable.image2, "2. 공조", "예매율 61.6% | 15세 관람가 | D-1", 2));
-        mData.add(Fragment1.newInstance(R.drawable.image3, "3. 더킹", "예매율 61.6% | 15세 관람가 | D-1", 3));
-        mData.add(Fragment1.newInstance(R.drawable.image4, "4. 레지던트이블", "예매율 61.6% | 15세 관람가 | D-1", 4));
-        mData.add(Fragment1.newInstance(R.drawable.image5, "5. 럭키", "예매율 61.6% | 15세 관람가 | D-1", 5));
+        mData.add(MovieListFragment.newInstance(R.drawable.image1, "1. 군도", "예매율 61.6% | 15세 관람가 | D-1", 1));
+        mData.add(MovieListFragment.newInstance(R.drawable.image2, "2. 공조", "예매율 61.6% | 15세 관람가 | D-1", 2));
+        mData.add(MovieListFragment.newInstance(R.drawable.image3, "3. 더킹", "예매율 61.6% | 15세 관람가 | D-1", 3));
+        mData.add(MovieListFragment.newInstance(R.drawable.image4, "4. 레지던트이블", "예매율 61.6% | 15세 관람가 | D-1", 4));
+        mData.add(MovieListFragment.newInstance(R.drawable.image5, "5. 럭키", "예매율 61.6% | 15세 관람가 | D-1", 5));
     }
 
     @Override

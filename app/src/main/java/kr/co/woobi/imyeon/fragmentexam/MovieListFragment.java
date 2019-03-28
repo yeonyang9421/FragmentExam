@@ -5,32 +5,48 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class Fragment1 extends Fragment {
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class MovieListFragment extends Fragment {
+    private static final String TAG = MovieIntroFragment.class.getSimpleName();
     private int mImage;
     private String mTitle;
     private String mContent;
     private Button mButton;
     private int position;
+    private int mId;
+    private ReadMovieList movieLists;
 
-    public Fragment1() {
+    public MovieListFragment() {
     }
 
-    public static Fragment1 newInstance(int image, String title, String content, int position) {
-        Fragment1 fragment1 = new Fragment1();
+
+    public static MovieListFragment newInstance(int image, String title, String content, int position) {
+        MovieListFragment movieListFragment = new MovieListFragment();
         Bundle args = new Bundle();
         args.putInt("image", image);
         args.putString("title", title);
         args.putString("content", content);
         args.putInt("position", position);
-        fragment1.setArguments(args);
-        return fragment1;
+        movieListFragment.setArguments(args);
+        return movieListFragment;
     }
 
     @Override
@@ -49,14 +65,44 @@ public class Fragment1 extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment1, container, false);
 
+
+        //============================================================================================
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://boostcourse-appapi.connect.or.kr:10000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        Service service = retrofit.create(Service.class);
+        service.listMoiveList().enqueue(new Callback<ReadMovieList>() {
+            @Override
+            public void onResponse(Call<ReadMovieList> call, Response<ReadMovieList> response) {
+                 movieLists = response.body();
+                Log.d(TAG, "onResponse: " + movieLists);
+
+            }
+
+            @Override
+            public void onFailure(Call<ReadMovieList> call, Throwable t) {
+                Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "onResponse: connect failed" + t.getLocalizedMessage());
+            }
+        });
+//============================================================================================
+        final ReadMovieList readMovieList=movieLists;
         mButton = view.findViewById(R.id.button1);
         ImageView imageView = view.findViewById(R.id.image_Poster1);
-        imageView.setImageResource(mImage);
+        Glide.with(view)
+                .load(readMovieList.getResult().get(1).getImage())
+                .centerCrop()
+                .placeholder(R.mipmap.ic_launcher)
+                .into(imageView);
+
+//        imageView.setImageResource(mImage);
         TextView textTitle = view.findViewById(R.id.text_title);
         textTitle.setText(mTitle);
         TextView textContent = view.findViewById(R.id.text_content);
         textContent.setText(mContent);
-
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
