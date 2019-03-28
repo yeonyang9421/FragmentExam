@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:src="@drawable/ic_15" />
+           />
     </LinearLayout>
 
     <LinearLayout
@@ -63,6 +63,15 @@
             android:background="@android:color/transparent"
             android:hint="평점을 입력해주세요"
             android:maxLines="1" />
+        <EditText
+            android:id="@+id/edit_writer"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_margin="4dp"
+            android:background="@drawable/roundedborder"
+            android:gravity="top"
+            android:hint="닉네임을 입력해주세요"
+            android:padding="8dp" />
 
         <EditText
             android:id="@+id/edit_comment"

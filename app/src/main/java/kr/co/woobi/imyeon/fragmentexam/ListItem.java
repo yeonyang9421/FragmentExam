@@ -1,13 +1,15 @@
 package kr.co.woobi.imyeon.fragmentexam;
 
-public class ListItem {
-    private String id;
+import kr.co.woobi.imyeon.fragmentexam.model.CommentList;
+
+public class ListItem extends CommentList {
+    private int id;
     private String time;
     private String comment;
     private double numStar;
     private int resId;
 
-    public ListItem(String id, String time, String comment, int resId, double numStar) {
+    public ListItem(int id, String time, String comment, int resId, double numStar) {
         this.id = id;
         this.time = time;
         this.comment = comment;
@@ -15,11 +17,11 @@ public class ListItem {
         this.numStar = numStar;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

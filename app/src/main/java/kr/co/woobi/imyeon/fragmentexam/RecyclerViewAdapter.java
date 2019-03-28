@@ -2,7 +2,6 @@ package kr.co.woobi.imyeon.fragmentexam;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,12 +11,16 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.co.woobi.imyeon.fragmentexam.model.CommentList;
+import kr.co.woobi.imyeon.fragmentexam.model.ReadCommentList;
+
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     public static final String TAG = RecyclerViewAdapter.class.getSimpleName();
 
-    List<ListItem> mItem = new ArrayList<>();
+    List<CommentList> mItem = new ArrayList<>();
 
-    public RecyclerViewAdapter(List<ListItem> item) {
+    public RecyclerViewAdapter(List<CommentList> item) {
+
         this.mItem = item;
     }
 
@@ -30,14 +33,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        ListItem item = mItem.get(i);
-        viewHolder.mImage.setImageResource(item.getResId());
-        viewHolder.mTextId.setText(item.getId());
+        CommentList item = mItem.get(i);
+        viewHolder.mImage.setImageResource(R.drawable.user1);
+        viewHolder.mTextId.setText(item.getId()+"");
         viewHolder.mTextTime.setText(item.getTime());
-        viewHolder.mTextComment.setText(item.getComment());
-        viewHolder.mRatingBar.setRating((float) item.getNumStar());
-
-        Log.d(TAG, "onBindViewHolder: " + item.getNumStar());
+        viewHolder.mTextComment.setText(item.getContents());
+        viewHolder.mRatingBar.setRating((float) item.getRating());
     }
 
     @Override

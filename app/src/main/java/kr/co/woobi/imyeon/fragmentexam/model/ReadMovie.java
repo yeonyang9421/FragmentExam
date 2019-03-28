@@ -1,11 +1,12 @@
-package kr.co.woobi.imyeon.fragmentexam;
+package kr.co.woobi.imyeon.fragmentexam.model;
 
-public class ReadCommentList {
+import java.util.List;
+
+public class ReadMovie {
     private String message;
-    private  int code;
+    private int code;
     private String resultType;
-
-    private int totalCount;
+    private List<MovieDetail> result = null;
 
     public String getMessage() {
         return message;
@@ -31,11 +32,11 @@ public class ReadCommentList {
         this.resultType = resultType;
     }
 
-    public int getTotalCount() {
-        return totalCount;
+    public List<MovieDetail> getResult() {
+        return result;
     }
 
-    public void setTotalCount(int totalCount) {
-        this.totalCount = totalCount;
+    public void setResult(List<MovieDetail> result) {
+        this.result = result;
     }
 }

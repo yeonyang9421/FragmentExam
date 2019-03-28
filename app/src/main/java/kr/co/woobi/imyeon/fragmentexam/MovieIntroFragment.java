@@ -12,8 +12,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+
+import java.util.List;
+
+import kr.co.woobi.imyeon.fragmentexam.model.CommentList;
+import kr.co.woobi.imyeon.fragmentexam.model.MovieDetail;
+import kr.co.woobi.imyeon.fragmentexam.model.ReadCommentList;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -22,77 +36,114 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mAdapter;
 
-    private Button mButton_ThumbUp;
-    private Button mButton_ThumbDown;
-    private Button mButton_comment;
-    private Button mButton_displayAll;
-    private TextView mTextViewUp;
-    private TextView mTextViewDown;
+    private Button mButton_ThumbUp,mButton_ThumbDown,mButton_comment,mButton_displayAll;
+    private TextView mTextViewTitle, mTextViewUp,mTextViewDown, mTextSynop, mTextReservationGrade, mTextReservationRating, mTextDate;
+    private TextView mTextGenre, mTextDuration, mTextRateReviewer, mTextAudience, mTextDirector, mTextActor;
+    private ImageView mImageViewSmallPoster,mImageViewGrade;
 
-    boolean mGood_flag = false;
-    boolean mBad_flag = false;
-    int mGoodCount = 0;
-    int mBadCount = 0;
-    String mNewComment;
-    double mNewNumStars;
+    private boolean mGood_flag = false;
+    private boolean mBad_flag = false;
+    private int mGoodCount = 0;
+    private int mBadCount = 0;
 
-    private ImageView mImageViewSmallPoster;
-    private TextView mTextViewTitle;
-    private ImageView mImageViewRated;
+    private MovieDetail mMovieDetail;
+    private MoviePosterFragment moviePosterFragment;
+    private List<CommentList> commentLists;
 
-    int imageSmallPoster;
-    String movieTitle;
-    int imageMovieRated;
-
-    public MovieIntroFragment() {
-    }
-
-    public static MovieIntroFragment newInstance(int imageSmallPoster, String movieTitle, int imageMovieRated) {
+    public static MovieIntroFragment newInstance(MovieDetail movieDetail) {
         MovieIntroFragment movieIntroFragment = new MovieIntroFragment();
         Bundle args = new Bundle();
-        args.putInt("imageSmallPoster", imageSmallPoster);
-        args.putString("movieTitle", movieTitle);
-        args.putInt("imageMovieRated", imageMovieRated);
+        args.putSerializable("movieDetail", movieDetail);
         movieIntroFragment.setArguments(args);
         return movieIntroFragment;
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            imageSmallPoster = getArguments().getInt("imageSmallPoster");
-            movieTitle = getArguments().getString("movieTitle");
-            imageMovieRated = getArguments().getInt("imageMovieRated");
+            mMovieDetail = (MovieDetail) getArguments().getSerializable("movieDetail");
         }
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mGoodCount = mMovieDetail.getLike();
+        mBadCount = mMovieDetail.getDislike();
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movie_introduction, container, false);
-
+        moviePosterFragment = new MoviePosterFragment();
         mRecyclerView = view.findViewById(R.id.recycler_main);
         mAdapter = new RecyclerViewAdapter(DummyData.sDummyDatas);
         mRecyclerView.setAdapter(mAdapter);
-
         mAdapter.notifyDataSetChanged();
 
-//------------------------------------------------ 왜 안되냐규,,,,,
         mImageViewSmallPoster = view.findViewById(R.id.image_small_poster);
-        mImageViewSmallPoster.setImageResource(imageSmallPoster);
+        Glide.with(view)
+                .load(mMovieDetail.getImage())
+                .into(mImageViewSmallPoster);
+
         mTextViewTitle = view.findViewById(R.id.text_title);
-        mTextViewTitle.setText(movieTitle);
-        mImageViewRated = view.findViewById(R.id.image_movie_rated);
-        mImageViewRated.setImageResource(imageMovieRated);
-        mImageViewRated.setTag("movieRated");
+        mTextViewTitle.setText(mMovieDetail.getTitle());
+
+        mImageViewGrade = view.findViewById(R.id.image_movie_rated);
+        if (mMovieDetail.getGrade() == 12) {
+            mImageViewGrade.setImageResource(R.drawable.ic_12);
+        } else if (mMovieDetail.getGrade() == 15) {
+            mImageViewGrade.setImageResource(R.drawable.ic_15);
+        } else if (mMovieDetail.getGrade() == 19) {
+            mImageViewGrade.setImageResource(R.drawable.ic_19);
+        } else {
+            mImageViewGrade.setImageResource(R.drawable.ic_all);
+        }
+
+        mImageViewGrade.setTag("movieGrade");
 
         mTextViewUp = view.findViewById(R.id.text_up);
+        mTextViewUp.setText(mMovieDetail.getLike() + "");
         mTextViewDown = view.findViewById(R.id.text_down);
+        mTextViewDown.setText(mMovieDetail.getDislike() + "");
+
         mButton_ThumbUp = view.findViewById(R.id.button_thumbUp);
         mButton_ThumbDown = view.findViewById(R.id.button_thumbDown);
+
+        mTextReservationGrade = view.findViewById(R.id.text_reservation_grade);
+        mTextReservationGrade.setText(mMovieDetail.getReservation_grade() + "위");
+
+        mTextReservationRating = view.findViewById(R.id.text_reservation_rating);
+        mTextReservationRating.setText(mMovieDetail.getReservation_rate() + "%");
+
+        mTextDate = view.findViewById(R.id.text_date);
+        mTextDate.setText(mMovieDetail.getDate() + " 개봉");
+
+        mTextGenre = view.findViewById(R.id.text_genre);
+        mTextGenre.setText(mMovieDetail.getGenre());
+
+        mTextDuration = view.findViewById(R.id.text_duration);
+        mTextDuration.setText(" / " + mMovieDetail.getDuration() + " 분");
+
+        RatingBar ratingBar = view.findViewById(R.id.ratingBar_reviewer);
+        ratingBar.setRating((float) mMovieDetail.getReviewer_rating());
+
+        mTextRateReviewer = view.findViewById(R.id.text_reviewer_rate);
+        mTextRateReviewer.setText(mMovieDetail.getReviewer_rating() + "");
+
+        mTextAudience = view.findViewById(R.id.text_audience);
+        mTextAudience.setText(mMovieDetail.getAudience() + " 명");
+
+        mTextDirector = view.findViewById(R.id.text_director);
+        mTextDirector.setText(mMovieDetail.getDirector());
+        mTextActor = view.findViewById(R.id.text_actor);
+        mTextActor.setText(mMovieDetail.getActor());
+
+        mTextSynop = view.findViewById(R.id.text_synopsis);
+        mTextSynop.setText(mMovieDetail.getSynopsis());
+
         mButton_comment = view.findViewById(R.id.button_comment);
         mButton_displayAll = view.findViewById(R.id.button_displayAll);
         mButton_ThumbUp.setOnClickListener(this);
@@ -106,6 +157,7 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_thumbUp:
+//                mGoodCount=mMovieDetail.getLike();
                 mGoodCount += 1;
                 mGood_flag = true;
                 mTextViewUp.setText(String.valueOf(mGoodCount));
@@ -136,17 +188,41 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
                 break;
             case R.id.button_comment:
                 Intent intent = new Intent(getActivity(), OneLineRatingActivity.class);
-                intent.putExtra("title",mTextViewTitle.getText().toString());
-                intent.putExtra("rated",getArguments().getInt("imageMovieRated"));
+                intent.putExtra("movieDetail", mMovieDetail);
                 startActivityForResult(intent, REQUEST_CODE_MAIN);
                 Toast.makeText(getActivity(), "작성하기 버튼을 눌러졌습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_displayAll:
+                //=================================================================================================
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("http://boostcourse-appapi.connect.or.kr:10000/")
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
+
+                Service service = retrofit.create(Service.class);
+                service.readCommentList(moviePosterFragment.getId(), 5, 5).enqueue(new Callback<List<ReadCommentList>>() {
+                    @Override
+                    public void onResponse(Call<List<ReadCommentList>> call, Response<List<ReadCommentList>> response) {
+
+                        if (response.body() != null) {
+                            commentLists = response.body().get(0).getResult();
+
+                            mAdapter = new RecyclerViewAdapter(commentLists);
+                            mRecyclerView.setAdapter(mAdapter);
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<ReadCommentList>> call, Throwable t) {
+                        Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+//                Log.d(TAG, "onResponse: connect failed" + t.getLocalizedMessage());
+                    }
+                });
+//=================================================================================================
+
                 Intent intent1 = new Intent(getActivity(), DisplayAllActivity.class);
-                intent1.putExtra("title",getArguments().getString("movieTitle"));
-                intent1.putExtra("rated",getArguments().getInt("imageMovieRated"));
-                intent1.putExtra("mComment", mNewComment);
-                intent1.putExtra("numStars", mNewNumStars);
+                intent1.putExtra("movieDetail", mMovieDetail);
                 startActivityForResult(intent1, REQUEST_CODE_MAIN);
                 Toast.makeText(getActivity(), "모두보기 버튼을 눌러졌습니다.", Toast.LENGTH_SHORT).show();
                 break;

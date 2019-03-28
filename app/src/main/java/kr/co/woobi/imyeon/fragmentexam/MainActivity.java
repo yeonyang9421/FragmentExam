@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.co.woobi.imyeon.fragmentexam.model.MovieInfo;
+import kr.co.woobi.imyeon.fragmentexam.model.ReadMovieList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onResponse(Call<ReadMovieList> call, Response<ReadMovieList> response) {
 
                 if (response.body() != null) {
-                    List<MovieInfo> movieLists = response.body().result;
+                    List<MovieInfo> movieLists = response.body().getResult();
 
                     List<Fragment> movieFragmentList = new ArrayList<>();
                     for (MovieInfo movieInfo :  movieLists) {
@@ -69,7 +71,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     adapter.setItems(movieFragmentList);
                     adapter.notifyDataSetChanged();
                 }
-
             }
 
             @Override

@@ -1,4 +1,4 @@
-package kr.co.woobi.imyeon.fragmentexam;
+package kr.co.woobi.imyeon.fragmentexam.model;
 
 import com.google.gson.annotations.SerializedName;
 

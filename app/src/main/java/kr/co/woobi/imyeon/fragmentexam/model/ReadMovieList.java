@@ -1,12 +1,12 @@
-package kr.co.woobi.imyeon.fragmentexam;
+package kr.co.woobi.imyeon.fragmentexam.model;
 
 import java.util.List;
 
 public class ReadMovieList {
-    public String message;
-    public int code;
-    public String resultType;
-    public List<MovieInfo> result = null;
+    private String message;
+    private int code;
+    private String resultType;
+    private List<MovieInfo> result = null;
 
     public String getMessage() {
         return message;
