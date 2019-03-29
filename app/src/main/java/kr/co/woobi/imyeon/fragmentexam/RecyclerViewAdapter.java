@@ -12,16 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import kr.co.woobi.imyeon.fragmentexam.model.CommentList;
-import kr.co.woobi.imyeon.fragmentexam.model.ReadCommentList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     public static final String TAG = RecyclerViewAdapter.class.getSimpleName();
 
     List<CommentList> mItem = new ArrayList<>();
 
-    public RecyclerViewAdapter(List<CommentList> item) {
+    public RecyclerViewAdapter() {
+    }
 
-        this.mItem = item;
+    public void setItems(List<CommentList> items) {
+        mItem = items;
+        notifyDataSetChanged();
     }
 
     @NonNull

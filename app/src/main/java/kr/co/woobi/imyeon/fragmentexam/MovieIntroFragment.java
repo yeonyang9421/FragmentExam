@@ -49,6 +49,7 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
     private MovieDetail mMovieDetail;
     private MoviePosterFragment moviePosterFragment;
     private List<CommentList> commentLists;
+    private Service mService;
 
     public static MovieIntroFragment newInstance(MovieDetail movieDetail) {
         MovieIntroFragment movieIntroFragment = new MovieIntroFragment();
@@ -64,6 +65,13 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
         if (getArguments() != null) {
             mMovieDetail = (MovieDetail) getArguments().getSerializable("movieDetail");
         }
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://boostcourse-appapi.connect.or.kr:10000/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        mService = retrofit.create(Service.class);
     }
 
     @Override
@@ -71,6 +79,24 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
         super.onViewCreated(view, savedInstanceState);
         mGoodCount = mMovieDetail.getLike();
         mBadCount = mMovieDetail.getDislike();
+
+        queryCommentList();
+    }
+
+    private void queryCommentList() {
+        mService.readCommentList(mMovieDetail.getId(), 3).enqueue(new Callback<ReadCommentList>() {
+            @Override
+            public void onResponse(Call<ReadCommentList> call, Response<ReadCommentList> response) {
+                if (response.body() != null) {
+                    mAdapter.setItems(response.body().getResult());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ReadCommentList> call, Throwable t) {
+
+            }
+        });
     }
 
     @Nullable
@@ -79,7 +105,7 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
         View view = inflater.inflate(R.layout.fragment_movie_introduction, container, false);
         moviePosterFragment = new MoviePosterFragment();
         mRecyclerView = view.findViewById(R.id.recycler_main);
-        mAdapter = new RecyclerViewAdapter(DummyData.sDummyDatas);
+        mAdapter = new RecyclerViewAdapter();
         mRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
 
@@ -193,34 +219,6 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "작성하기 버튼을 눌러졌습니다.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.button_displayAll:
-                //=================================================================================================
-                Retrofit retrofit = new Retrofit.Builder()
-                        .baseUrl("http://boostcourse-appapi.connect.or.kr:10000/")
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-
-                Service service = retrofit.create(Service.class);
-                service.readCommentList(moviePosterFragment.getId(), 5, 5).enqueue(new Callback<List<ReadCommentList>>() {
-                    @Override
-                    public void onResponse(Call<List<ReadCommentList>> call, Response<List<ReadCommentList>> response) {
-
-                        if (response.body() != null) {
-                            commentLists = response.body().get(0).getResult();
-
-                            mAdapter = new RecyclerViewAdapter(commentLists);
-                            mRecyclerView.setAdapter(mAdapter);
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<List<ReadCommentList>> call, Throwable t) {
-                        Toast.makeText(getActivity(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-//                Log.d(TAG, "onResponse: connect failed" + t.getLocalizedMessage());
-                    }
-                });
-//=================================================================================================
-
                 Intent intent1 = new Intent(getActivity(), DisplayAllActivity.class);
                 intent1.putExtra("movieDetail", mMovieDetail);
                 startActivityForResult(intent1, REQUEST_CODE_MAIN);
@@ -233,7 +231,7 @@ public class MovieIntroFragment extends Fragment implements View.OnClickListener
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE_MAIN && resultCode == RESULT_OK) {
-            mAdapter.notifyDataSetChanged();
+            queryCommentList();
         }
     }
 

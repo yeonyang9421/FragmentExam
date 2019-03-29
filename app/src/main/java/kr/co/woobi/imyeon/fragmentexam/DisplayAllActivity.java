@@ -3,26 +3,16 @@ package kr.co.woobi.imyeon.fragmentexam;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import kr.co.woobi.imyeon.fragmentexam.model.CommentList;
 import kr.co.woobi.imyeon.fragmentexam.model.MovieDetail;
-import kr.co.woobi.imyeon.fragmentexam.model.MovieInfo;
 import kr.co.woobi.imyeon.fragmentexam.model.ReadCommentList;
-import kr.co.woobi.imyeon.fragmentexam.model.ReadMovie;
-import kr.co.woobi.imyeon.fragmentexam.model.ReadMovieList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,18 +29,16 @@ public class DisplayAllActivity extends AppCompatActivity {
     private RecyclerViewAdapter mAdapter;
     private Intent mIntent;
 
-    private int mId = 1;
     MovieDetail mMovieDetail;
+    private Service mService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_all);
 
-        MoviePosterFragment moviePosterFragment = new MoviePosterFragment();
-
         mIntent = getIntent();
-        mId=mIntent.getIntExtra("id",0);
-        mMovieDetail= (MovieDetail) mIntent.getSerializableExtra("movieDetail");
+        mMovieDetail = (MovieDetail) mIntent.getSerializableExtra("movieDetail");
 //        mTextTitle.setText(mIntent.getStringExtra("title"));
 //        mImageRated.setImageResource(mIntent.getIntExtra("movieGrade", 0));
 //        mNewNumStars = mIntent.getDoubleExtra("numStars", 0);
@@ -68,35 +56,33 @@ public class DisplayAllActivity extends AppCompatActivity {
             mImageViewGrade.setImageResource(R.drawable.ic_all);
         }
 
+        mAdapter = new RecyclerViewAdapter();
+        mRecyclerView.setAdapter(mAdapter);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://boostcourse-appapi.connect.or.kr:10000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
-        Service service = retrofit.create(Service.class);
-        service.readCommentList(mId, 5, 5).enqueue(new Callback<List<ReadCommentList>>() {
+        mService = retrofit.create(Service.class);
+
+        queryCommentList();
+    }
+
+    private void queryCommentList() {
+        mService.readCommentList(mMovieDetail.getId()).enqueue(new Callback<ReadCommentList>() {
             @Override
-            public void onResponse(Call<List<ReadCommentList>> call, Response<List<ReadCommentList>> response) {
-
+            public void onResponse(Call<ReadCommentList> call, Response<ReadCommentList> response) {
                 if (response.body() != null) {
-                    List<CommentList> commentLists = response.body().get(0).getResult();
-                    Toast.makeText(DisplayAllActivity.this, "성공" + response.body().get(0).getResult(), Toast.LENGTH_SHORT).show();
-
-                    mAdapter = new RecyclerViewAdapter(commentLists);
-                    mRecyclerView.setAdapter(mAdapter);
-                    mAdapter.notifyDataSetChanged();
+                    mAdapter.setItems(response.body().getResult());
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ReadCommentList>> call, Throwable t) {
-                Toast.makeText(getBaseContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                Log.d("commentList", "onResponse: connect failed" + t.getLocalizedMessage());
+            public void onFailure(Call<ReadCommentList> call, Throwable t) {
+                Toast.makeText(DisplayAllActivity.this, t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
     }
 
     @Override
@@ -121,7 +107,7 @@ public class DisplayAllActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
-            mAdapter.notifyDataSetChanged();
+            queryCommentList();
             setResult(RESULT_OK);
         }
     }

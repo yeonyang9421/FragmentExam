@@ -9,7 +9,7 @@ public class CommentList implements Serializable {
     private int writer_image;
     private String time;
     private int timestamp;
-    private int rating;
+    private double rating;
     private String contents;
     private int recommend;
 
@@ -61,11 +61,11 @@ public class CommentList implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public int getRating() {
+    public double getRating() {
         return rating;
     }
 
-    public void setRating(int rating) {
+    public void setRating(double rating) {
         this.rating = rating;
     }
 

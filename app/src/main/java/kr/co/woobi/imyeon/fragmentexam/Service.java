@@ -1,7 +1,5 @@
 package kr.co.woobi.imyeon.fragmentexam;
 
-import java.util.List;
-
 import kr.co.woobi.imyeon.fragmentexam.model.CreateComment;
 import kr.co.woobi.imyeon.fragmentexam.model.IncreaseLikeDislike;
 import kr.co.woobi.imyeon.fragmentexam.model.IncreaseRecommend;
@@ -22,9 +20,16 @@ public interface Service {
 
 
     @GET("movie/readCommentList")
-    Call<List<ReadCommentList>> readCommentList(@Query("id") int id,
+    Call<ReadCommentList> readCommentList(@Query("id") int id,
                                                 @Query("startIndex") int startIndex,
                                                 @Query("length") int length);
+
+    @GET("movie/readCommentList")
+    Call<ReadCommentList> readCommentList(@Query("id") int id,
+                                                @Query("limit") int limit);
+
+    @GET("movie/readCommentList")
+    Call<ReadCommentList> readCommentList(@Query("id") int id);
 
     @GET("movie/createComment")
     Call<CreateComment> createComment(@Query("id") int id,

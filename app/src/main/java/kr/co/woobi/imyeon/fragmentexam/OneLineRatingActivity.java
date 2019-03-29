@@ -2,7 +2,6 @@ package kr.co.woobi.imyeon.fragmentexam;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -12,17 +11,11 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
-import kr.co.woobi.imyeon.fragmentexam.model.CommentList;
 import kr.co.woobi.imyeon.fragmentexam.model.CreateComment;
 import kr.co.woobi.imyeon.fragmentexam.model.MovieDetail;
-import kr.co.woobi.imyeon.fragmentexam.model.MovieInfo;
-import kr.co.woobi.imyeon.fragmentexam.model.ReadCommentList;
-import kr.co.woobi.imyeon.fragmentexam.model.ReadMovieList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,8 +73,8 @@ public class OneLineRatingActivity extends AppCompatActivity implements View.OnC
                 String comment = mEditTextComment.getText().toString();
                 double numStarts = mRatingBar.getRating();
                 String writer = mEditTextWriter.getText().toString();
-                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                String time = format.format(System.currentTimeMillis());
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                String time = format.format(new Date());
 
                 Retrofit retrofit = new Retrofit.Builder()
                         .baseUrl("http://boostcourse-appapi.connect.or.kr:10000/")
@@ -95,7 +88,11 @@ public class OneLineRatingActivity extends AppCompatActivity implements View.OnC
 
                         if (response.body() != null) {
                             CreateComment status = response.body();
-                            Toast.makeText(OneLineRatingActivity.this, "성공!" + status, Toast.LENGTH_SHORT).show();
+                            if (status.getStatus() == 200) {
+                                Toast.makeText(OneLineRatingActivity.this, "성공!" + status, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(OneLineRatingActivity.this, "실패!" + status, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
 
