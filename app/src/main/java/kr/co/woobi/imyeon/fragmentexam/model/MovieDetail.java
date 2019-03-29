@@ -7,7 +7,7 @@ public class MovieDetail implements Serializable {
     private int id;
     private String title;
    private String date;
-   private int user_rating;
+   private double user_rating;
    private double audience_rating;
    private double reviewer_rating;
    private double reservation_rate;
@@ -50,7 +50,7 @@ public class MovieDetail implements Serializable {
         this.date = date;
     }
 
-    public int getUser_rating() {
+    public double getUser_rating() {
         return user_rating;
     }
 
