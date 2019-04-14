@@ -1,6 +1,7 @@
 package kr.co.woobi.imyeon.fragmentexam;
 
 import android.content.Intent;
+import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import kr.co.woobi.imyeon.fragmentexam.databinding.ActivityOneLineRatingBinding;
 import kr.co.woobi.imyeon.fragmentexam.model.CreateComment;
 import kr.co.woobi.imyeon.fragmentexam.model.MovieDetail;
 import retrofit2.Call;
@@ -23,12 +25,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class OneLineRatingActivity extends AppCompatActivity implements View.OnClickListener, RatingBar.OnRatingBarChangeListener {
-    private TextView mTextTitle;
-    private ImageView mImageViewGrade;
-    private RatingBar mRatingBar;
-    private EditText mEditTextComment, mEditTextWriter;
-    private Button mButtonSave;
-    private Button mButtonCancel;
+    ActivityOneLineRatingBinding mBinding;
     private MovieIntroFragment mMovieIntroFragemnet;
     private int mId;
     MovieDetail mMovieDetail;
@@ -36,43 +33,37 @@ public class OneLineRatingActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_one_line_rating);
+//        setContentView(R.layout.activity_one_line_rating);
+
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_one_line_rating);
 
         Intent intent = getIntent();
-        mMovieDetail= (MovieDetail) intent.getSerializableExtra("movieDetail");
-        mTextTitle = findViewById(R.id.text_oneline_title);
-        mImageViewGrade = findViewById(R.id.image_oneline_rated);
-//        mTextTitle.setText(intent.getStringExtra("title"));
-        mImageViewGrade.setImageResource(intent.getIntExtra("rated", 0));
-        mTextTitle.setText(mMovieDetail.getTitle());
+        mMovieDetail = (MovieDetail) intent.getSerializableExtra("movieDetail");
+        mBinding.imageOnelineRated.setImageResource(intent.getIntExtra("rated", 0));
+        mBinding.textOnelineTitle.setText(mMovieDetail.getTitle());
         if (mMovieDetail.getGrade() == 12) {
-            mImageViewGrade.setImageResource(R.drawable.ic_12);
+            mBinding.imageOnelineRated.setImageResource(R.drawable.ic_12);
         } else if (mMovieDetail.getGrade() == 15) {
-            mImageViewGrade.setImageResource(R.drawable.ic_15);
+            mBinding.imageOnelineRated.setImageResource(R.drawable.ic_15);
         } else if (mMovieDetail.getGrade() == 19) {
-            mImageViewGrade.setImageResource(R.drawable.ic_19);
+            mBinding.imageOnelineRated.setImageResource(R.drawable.ic_19);
         } else {
-            mImageViewGrade.setImageResource(R.drawable.ic_all);
+            mBinding.imageOnelineRated.setImageResource(R.drawable.ic_all);
         }
 
         mId = intent.getIntExtra("id", 0);
-        mRatingBar = findViewById(R.id.ratingBar);
-        mEditTextComment = findViewById(R.id.edit_comment);
-        mEditTextWriter = findViewById(R.id.edit_writer);
-        mButtonSave = findViewById(R.id.button_save);
-        mButtonCancel = findViewById(R.id.button_cancel);
-        mButtonSave.setOnClickListener(this);
-        mButtonCancel.setOnClickListener(this);
-        mRatingBar.setOnRatingBarChangeListener(this);
+        mBinding.buttonSave.setOnClickListener(this);
+        mBinding.buttonCancel.setOnClickListener(this);
+        mBinding.ratingBar.setOnRatingBarChangeListener(this);
     }
 
     @Override
     public void onClick(final View v) {
         switch (v.getId()) {
             case R.id.button_save:
-                String comment = mEditTextComment.getText().toString();
-                double numStarts = mRatingBar.getRating();
-                String writer = mEditTextWriter.getText().toString();
+                String comment = mBinding.editComment.getText().toString();
+                double numStarts = mBinding.ratingBar.getRating();
+                String writer = mBinding.editWriter.getText().toString();
                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 String time = format.format(new Date());
 
@@ -101,7 +92,6 @@ public class OneLineRatingActivity extends AppCompatActivity implements View.OnC
                         Toast.makeText(v.getContext(), t.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
-
                 setResult(RESULT_OK);
                 finish();
                 break;
@@ -113,6 +103,6 @@ public class OneLineRatingActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-        Toast.makeText(this, mRatingBar.getRating() + "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, mBinding.ratingBar.getRating() + "", Toast.LENGTH_SHORT).show();
     }
 }

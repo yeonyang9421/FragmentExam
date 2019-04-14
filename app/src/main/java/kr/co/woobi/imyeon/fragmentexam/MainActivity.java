@@ -41,6 +41,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ViewPager viewPager = findViewById(R.id.pager);
         final MoviePosterPagerAdapter adapter = new MoviePosterPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        //=======================화면전환
+        CubeInScalingTransformation cubeInScalingTransformation = new CubeInScalingTransformation();
+        viewPager.setPageTransformer(true, cubeInScalingTransformation);
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -65,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     List<MovieInfo> movieLists = response.body().getResult();
 
                     List<Fragment> movieFragmentList = new ArrayList<>();
-                    for (MovieInfo movieInfo :  movieLists) {
+                    for (MovieInfo movieInfo : movieLists) {
                         movieFragmentList.add(MoviePosterFragment.newInstance(movieInfo));
                     }
                     adapter.setItems(movieFragmentList);

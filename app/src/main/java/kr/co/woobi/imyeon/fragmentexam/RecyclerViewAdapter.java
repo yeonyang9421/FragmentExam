@@ -1,5 +1,6 @@
 package kr.co.woobi.imyeon.fragmentexam;
 
+import android.databinding.DataBindingUtil;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import kr.co.woobi.imyeon.fragmentexam.databinding.ItemRatingBinding;
 import kr.co.woobi.imyeon.fragmentexam.model.CommentList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -36,11 +38,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
         CommentList item = mItem.get(i);
-        viewHolder.mImage.setImageResource(R.drawable.user1);
-        viewHolder.mTextId.setText(item.getId()+"");
-        viewHolder.mTextTime.setText(item.getTime());
-        viewHolder.mTextComment.setText(item.getContents());
-        viewHolder.mRatingBar.setRating((float) item.getRating());
+        viewHolder.binding.setComment(item);
+/*        viewHolder.binding.imagePhoto.setImageResource(item.getWriter_image());
+        viewHolder.binding.textUseId.setText(item.getId()+"");
+        viewHolder.binding.textTime.setText(item.getTime());
+        viewHolder.binding.textComment.setText(item.getContents());
+        viewHolder.binding.ratingBar.setRating((float) item.getRating());*/
     }
 
     @Override
@@ -49,19 +52,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        de.hdodenhof.circleimageview.CircleImageView mImage;
-        TextView mTextId;
-        TextView mTextTime;
-        RatingBar mRatingBar;
-        TextView mTextComment;
+        ItemRatingBinding binding;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            mImage = itemView.findViewById(R.id.image_photo);
-            mTextId = itemView.findViewById(R.id.text_useId);
-            mTextTime = itemView.findViewById(R.id.text_time);
-            mRatingBar = itemView.findViewById(R.id.ratingBar);
-            mTextComment = itemView.findViewById(R.id.text_comment);
+            binding = DataBindingUtil.bind(itemView);
         }
     }
 }

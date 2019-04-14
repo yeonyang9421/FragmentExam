@@ -1,93 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="12dp">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/image_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="8dp"
-        android:src="@drawable/user1"
-        app:civ_border_color="#d1d1d1"
-        app:civ_border_width="2dp" />
+    <data>
+
+        <variable
+            name="comment"
+            type="kr.co.woobi.imyeon.fragmentexam.model.CommentList"/>
+    </data>
+
+
+
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:orientation="horizontal"
+        android:padding="12dp">
 
-        <TextView
-            android:id="@+id/text_useId"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/image_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="kym71**"
-            android:textColor="#000000"
-            android:textSize="8dp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/text_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="10분전"
-                android:textSize="10dp" />
-
-            <RatingBar
-                android:id="@+id/ratingBar"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:numStars="5"
-                android:rating="5" />
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/text_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:padding="8dp"
-            android:text="적당히 재밌다. 오랫만에 잠 안오는 영화를 봤네요."
-            android:textColor="#000000"
-            android:textSize="12dp" />
+            android:src="@drawable/user1"
+            app:civ_border_color="#d1d1d1"
+            app:civ_border_width="2dp" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <TextView
+                android:id="@+id/text_useId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="추천"
+                android:text="@{comment.writer}"
                 android:textColor="#000000"
                 android:textSize="8dp" />
 
-            <TextView
-                android:id="@+id/text_recommedationCount"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="4dp"
-                android:text="0" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/text_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{Integer.toString(comment.timestamp)}"
+                    android:textSize="10dp" />
+
+                <RatingBar
+                    android:id="@+id/ratingBar"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:numStars="5"
+                    android:rating="@{(float)comment.rating}" />
+            </LinearLayout>
 
             <TextView
+                android:id="@+id/text_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="신고하기"
-                android:textSize="8dp" />
+                android:padding="8dp"
+                android:text="@{comment.contents}"
+                android:textColor="#000000"
+                android:textSize="12dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="추천"
+                    android:textColor="#000000"
+                    android:textSize="8dp" />
+
+                <TextView
+                    android:id="@+id/text_recommedationCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="4dp"
+                    android:text="@{Integer.toString(comment.recommend)}" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="신고하기"
+                    android:textSize="8dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
+</layout>
